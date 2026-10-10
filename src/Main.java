@@ -92,8 +92,18 @@ public class Main {
         while (true) {
             System.out.print(prompt);
             String value = scanner.nextLine().trim();
-            if (!value.isEmpty()) return value;
-            System.out.println("Fältet får inte vara tomt.");
+
+            if (value.isEmpty()) {
+                System.out.println("Fältet får inte vara tomt.");
+                continue;
+            }
+
+            if (!value.matches("[a-zA-ZåäöÅÄÖ ]+")) {
+                System.out.println("Ogiltigt namn. Ange endast bokstäver.");
+                continue;
+            }
+
+            return value;
         }
     }
 
