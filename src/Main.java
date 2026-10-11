@@ -21,7 +21,10 @@ public class Main {
                 case 4 -> changeBalance(false);
                 case 5 -> createAccount(true);
                 case 6 -> applySavingsInterest();
-                case 7 -> { running = false; System.out.println("Programmet avslutas. Hej då!"); }
+                case 7 -> {
+                    running = false;
+                    System.out.println("Programmet avslutas. Hej då!");
+                }
                 default -> System.out.println("Ogiltigt val. Välj 1–7.");
             }
             System.out.println();
@@ -43,13 +46,24 @@ public class Main {
     private void createAccount(boolean savings) {
         String owner = readNonEmpty("Ange kontoinnehavarens namn: ");
         double balance = readDouble("Ange startbelopp (kr): ");
+
         if (balance < 0) {
             System.out.println("Startbeloppet kan inte vara negativt.");
             return;
         }
+
         try {
             if (savings) {
-                double rate = readDouble("Ange årlig ränta i procent (t.ex. 2 för 2%): ") / 100.0;
+                double rate = readDouble(
+                        "Ange årlig ränta i procent (t.ex. 2 för 2%): "
+                ) / 100.0;
+
+                // Kontrollera att räntan inte är negativ.
+                if (rate < 0) {
+                    System.out.println("Räntan kan inte vara negativ.");
+                    return;
+                }
+
                 register.createSavingsAccount(owner, balance, rate);
                 System.out.println("Sparkontot skapades.");
             } else {
@@ -85,23 +99,27 @@ public class Main {
             System.out.println(
                     deposit
                             ? "Insättningen genomfördes."
-                            : "Uttaget genomfördes.");
+                            : "Uttaget genomfördes."
+            );
         } else {
             System.out.println(
                     deposit
                             ? "Insättningen kunde inte genomföras."
-                            : "Uttaget kunde inte genomföras.");
+                            : "Uttaget kunde inte genomföras."
+            );
         }
     }
 
     private void applySavingsInterest() {
         int count = 0;
+
         for (Account account : register.getAccounts()) {
             if (account instanceof SavingsAccount savings) {
                 savings.applyInterest();
                 count++;
             }
         }
+
         System.out.println("Ränta beräknad för " + count + " sparkonto(n).");
     }
 
@@ -128,8 +146,12 @@ public class Main {
         while (true) {
             System.out.print(prompt);
             String value = scanner.nextLine().trim();
-            try { return Integer.parseInt(value); }
-            catch (NumberFormatException ex) { System.out.println("Ange ett heltal."); }
+
+            try {
+                return Integer.parseInt(value);
+            } catch (NumberFormatException ex) {
+                System.out.println("Ange ett heltal.");
+            }
         }
     }
 
@@ -137,10 +159,17 @@ public class Main {
         while (true) {
             System.out.print(prompt);
             String value = scanner.nextLine().trim().replace(',', '.');
+
             try {
                 double number = Double.parseDouble(value);
-                if (Double.isFinite(number)) return number;
-            } catch (NumberFormatException ignored) { /* show validation below */ }
+
+                if (Double.isFinite(number)) {
+                    return number;
+                }
+            } catch (NumberFormatException ignored) {
+                // Visa felmeddelandet nedan.
+            }
+
             System.out.println("Ange ett giltigt numeriskt belopp.");
         }
     }
