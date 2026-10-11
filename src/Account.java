@@ -28,13 +28,13 @@ public class Account {
 
     public boolean withdraw(double amount) {
         if (!Double.isFinite(amount) || amount <= 0) {
-            System.out.println("Uttaget måste vara större än 0.");
             return false;
         }
+
         if (amount > balance) {
-            System.out.println("Uttaget nekades: saldot räcker inte.");
             return false;
         }
+
         balance -= amount;
         return true;
     }
