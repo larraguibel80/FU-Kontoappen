@@ -14,6 +14,7 @@ public class Main {
         while (running) {
             printMenu();
             int choice = readInt("Välj ett alternativ: ");
+
             switch (choice) {
                 case 1 -> createAccount(false);
                 case 2 -> register.printAllAccounts();
@@ -27,8 +28,10 @@ public class Main {
                 }
                 default -> System.out.println("Ogiltigt val. Välj 1–7.");
             }
+
             System.out.println();
         }
+
         scanner.close();
     }
 
@@ -58,7 +61,6 @@ public class Main {
                         "Ange årlig ränta i procent (t.ex. 2 för 2%): "
                 ) / 100.0;
 
-                // Kontrollera att räntan inte är negativ.
                 if (rate < 0) {
                     System.out.println("Räntan kan inte vara negativ.");
                     return;
@@ -90,6 +92,12 @@ public class Main {
         }
 
         double amount = readDouble("Ange belopp (kr): ");
+
+        // Kontrollera att beloppet är större än 0.
+        if (amount <= 0) {
+            System.out.println("Beloppet måste vara större än 0.");
+            return;
+        }
 
         boolean success = deposit
                 ? account.deposit(amount)
