@@ -66,15 +66,32 @@ public class Main {
             System.out.println("Skapa ett konto först.");
             return;
         }
+
         String owner = readNonEmpty("Ange kontoinnehavarens namn: ");
         Account account = register.findAccountByOwner(owner);
+
         if (account == null) {
             System.out.println("Hittade inget konto med den ägaren.");
             return;
         }
+
         double amount = readDouble("Ange belopp (kr): ");
-        boolean success = deposit ? account.deposit(amount) : account.withdraw(amount);
-        if (success) System.out.println(deposit ? "Insättningen genomfördes." : "Uttaget genomfördes.");
+
+        boolean success = deposit
+                ? account.deposit(amount)
+                : account.withdraw(amount);
+
+        if (success) {
+            System.out.println(
+                    deposit
+                            ? "Insättningen genomfördes."
+                            : "Uttaget genomfördes.");
+        } else {
+            System.out.println(
+                    deposit
+                            ? "Insättningen kunde inte genomföras."
+                            : "Uttaget kunde inte genomföras.");
+        }
     }
 
     private void applySavingsInterest() {
