@@ -9,9 +9,13 @@ public class AccountRegister {
 
     public Account createAccount(String owner, double startBalance) {
 
-        if (findAccountByOwner(owner) != null) {
-            throw new IllegalArgumentException(
-                    "Det finns redan ett konto med detta namn.");
+        for (Account account : accounts) {
+            if (!(account instanceof SavingsAccount)
+                    && account.getOwner().equalsIgnoreCase(owner.trim())) {
+
+                throw new IllegalArgumentException(
+                        "Det finns redan ett vanligt konto med detta namn.");
+            }
         }
 
         Account account = new Account(owner, startBalance);
@@ -24,9 +28,14 @@ public class AccountRegister {
             double startBalance,
             double interestRate) {
 
-        if (findAccountByOwner(owner) != null) {
-            throw new IllegalArgumentException(
-                    "Det finns redan ett konto med detta namn.");
+        for (Account account : accounts) {
+
+            if (account instanceof SavingsAccount
+                    && account.getOwner().equalsIgnoreCase(owner.trim())) {
+
+                throw new IllegalArgumentException(
+                        "Det finns redan ett sparkonto med detta namn.");
+            }
         }
 
         SavingsAccount account =
